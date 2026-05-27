@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-nikan-anonymization.anonymization",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["AI", "Utility"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://github.com/nikan-ai/n8n-nodes-nikan-anonymization#credentials"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/nikan-ai/n8n-nodes-nikan-anonymization"
+			}
+		]
+	}
+}

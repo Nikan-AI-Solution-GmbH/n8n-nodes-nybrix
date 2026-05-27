@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text Transformation API Tester</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: #1e2130;
+      border: 1px solid #2d3148;
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto 1.25rem auto;
+    }
+
+    .card h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 0.3rem;
+      margin-top: 0.75rem;
+    }
+
+    input[type="text"], input[type="password"], textarea, select {
+      width: 100%;
+      background: #0f1117;
+      border: 1px solid #2d3148;
+      border-radius: 8px;
+      color: #e2e8f0;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #6366f1;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 140px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .key-toggle {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .key-btn {
+      flex: 1;
+      padding: 0.45rem;
+      border-radius: 6px;
+      border: 1px solid #2d3148;
+      background: #0f1117;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .key-btn.active {
+      background: #312e81;
+      border-color: #6366f1;
+      color: #a5b4fc;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .mode-card {
+      border: 1px solid #2d3148;
+      border-radius: 8px;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .mode-card:hover { border-color: #6366f1; }
+
+    .mode-card.active {
+      background: #1e1b4b;
+      border-color: #6366f1;
+    }
+
+    .mode-card .mode-icon { font-size: 1.4rem; margin-bottom: 0.3rem; }
+    .mode-card .mode-label { font-size: 0.8rem; font-weight: 600; color: #e2e8f0; }
+    .mode-card .mode-desc { font-size: 0.7rem; color: #64748b; margin-top: 0.2rem; }
+
+    .btn-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    button.primary {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      border: none;
+      background: #6366f1;
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    button.primary:hover:not(:disabled) { background: #4f46e5; }
+    button.primary:disabled { background: #374151; color: #6b7280; cursor: not-allowed; }
+
+    button.secondary {
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #2d3148;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    button.secondary:hover { border-color: #6366f1; color: #a5b4fc; }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .status-bar.info    { background: #1e3a5f; border: 1px solid #1d4ed8; color: #93c5fd; display: flex; }
+    .status-bar.success { background: #14532d; border: 1px solid #16a34a; color: #86efac; display: flex; }
+    .status-bar.error   { background: #450a0a; border: 1px solid #dc2626; color: #fca5a5; display: flex; }
+    .status-bar.running { background: #1c1a2e; border: 1px solid #7c3aed; color: #c4b5fd; display: flex; }
+
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .result-box {
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+    }
+
+    .result-header span { font-size: 0.8rem; color: #64748b; }
+
+    .result-content {
+      background: #0a0c14;
+      border: 1px solid #2d3148;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.78rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #a5f3fc;
+      max-height: 400px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+
+    .request-id-box {
+      display: none;
+      background: #0a0c14;
+      border: 1px solid #2d3148;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.78rem;
+      color: #fde68a;
+      margin-top: 0.75rem;
+      word-break: break-all;
+    }
+
+    .log-box {
+      background: #070911;
+      border: 1px solid #1a1f35;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.72rem;
+      color: #475569;
+      max-height: 180px;
+      overflow-y: auto;
+      margin-top: 0.75rem;
+      line-height: 1.7;
+    }
+
+    .log-entry { color: #475569; }
+    .log-entry.ok { color: #4ade80; }
+    .log-entry.err { color: #f87171; }
+    .log-entry.info { color: #60a5fa; }
+
+    .copy-btn {
+      padding: 0.3rem 0.65rem;
+      border-radius: 5px;
+      border: 1px solid #2d3148;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover { border-color: #6366f1; color: #a5b4fc; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 600;
+    }
+
+    .badge.anon   { background: #1e3a5f; color: #93c5fd; }
+    .badge.pseudo { background: #1e1b4b; color: #a5b4fc; }
+    .badge.deanon { background: #14532d; color: #86efac; }
+
+    .toggle-show {
+      font-size: 0.72rem;
+      color: #6366f1;
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Text Transformation API Tester</h1>
+<p class="subtitle">Anonymization · Pseudonymization · Deanonymization</p>
+
+<!-- Connection Settings -->
+<div class="card">
+  <h2>Connection</h2>
+
+  <label>MCP Endpoint URL</label>
+  <input type="text" id="mcpUrl"
+    value="https://nsdev01pqn3u7u9-backend-mcp-ca-dev-01.functions.fnc.fr-par.scw.cloud/mcp" />
+
+  <label>API Key</label>
+  <div style="position:relative">
+    <input type="password" id="apiKey"
+      value="nk-ISwyf__FQrDXsnpGvUMv1UeNvd_joXDXf9cac7yHNUYJWcQEGgP2oL4FefsDSEhfWDwgq88XU2RhC-HCnXR7iA" />
+    <button class="toggle-show" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%)"
+      onclick="toggleKeyVisibility()">show</button>
+  </div>
+
+  <div class="key-toggle">
+    <button class="key-btn active" onclick="selectKey(0, this)">Key 1 (default)</button>
+    <button class="key-btn" onclick="selectKey(1, this)">Key 2</button>
+    <button class="key-btn" onclick="selectKey(2, this)">Custom</button>
+  </div>
+</div>
+
+<!-- Mode & Input -->
+<div class="card">
+  <h2>Request</h2>
+
+  <label>Transformation Mode</label>
+  <div class="mode-grid">
+    <div class="mode-card active" onclick="setMode('1', this)">
+      <div class="mode-icon">🔒</div>
+      <div class="mode-label">Anonymize</div>
+      <div class="mode-desc">Extract &amp; replace PII with placeholders + pseudonymize</div>
+    </div>
+    <div class="mode-card" onclick="setMode('2', this)">
+      <div class="mode-icon">🔓</div>
+      <div class="mode-label">Deanonymize</div>
+      <div class="mode-desc">Restore original values from placeholder text</div>
+    </div>
+  </div>
+
+  <label>Input Text</label>
+  <textarea id="inputText" placeholder="Paste text here…">Hi Support Team, My name is Jordan Miller, and I am writing to report a persistent connectivity issue at my home in Seattle, Washington. Since approximately 2:00 PM yesterday, my service has been dropping every few minutes. You can reach me at (206) 555-0198 or j.miller_example@email.com. Best regards, Jordan Miller</textarea>
+
+  <div class="btn-row">
+    <button class="primary" id="submitBtn" onclick="submitRequest()">Run Transformation</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+  </div>
+
+  <div class="status-bar info" id="statusBar">
+    <div class="spinner" id="spinner" style="display:none"></div>
+    <span id="statusMsg"></span>
+  </div>
+
+  <div class="request-id-box" id="requestIdBox"></div>
+</div>
+
+<!-- Result -->
+<div class="card" id="resultCard" style="display:none">
+  <h2>Result</h2>
+  <div class="result-box" id="resultBox" style="display:block">
+    <div class="result-header">
+      <span id="resultLabel">Output</span>
+      <button class="copy-btn" onclick="copyResult()">Copy</button>
+    </div>
+    <div class="result-content" id="resultContent"></div>
+  </div>
+</div>
+
+<!-- Debug Log -->
+<div class="card">
+  <h2>Debug Log</h2>
+  <div class="log-box" id="logBox">
+    <div class="log-entry info">Ready. Fill in the form and click Run.</div>
+  </div>
+</div>
+
+<script>
+  const KEYS = [
+    "nk-ISwyf__FQrDXsnpGvUMv1UeNvd_joXDXf9cac7yHNUYJWcQEGgP2oL4FefsDSEhfWDwgq88XU2RhC-HCnXR7iA",
+    "nk-SrRmcbnnpA82Ri3UnNmVL-Goxn_kI3Yj8NDinDXyvu96C_sFwlfk4Jg_oHSKNYsFldvhqvVT53gSQAqJukkc4A",
+  ];
+
+  let selectedMode = "1";
+  let sessionId = null;
+  let msgId = 0;
+  let polling = false;
+
+  // ── Helpers ──────────────────────────────────────────────────────────────────
+
+  function log(msg, type = "") {
+    const box = document.getElementById("logBox");
+    const el = document.createElement("div");
+    el.className = `log-entry ${type}`;
+    const ts = new Date().toLocaleTimeString();
+    el.textContent = `[${ts}] ${msg}`;
+    box.appendChild(el);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function setStatus(msg, type = "info", showSpinner = false) {
+    const bar = document.getElementById("statusBar");
+    bar.className = `status-bar ${type}`;
+    document.getElementById("statusMsg").textContent = msg;
+    document.getElementById("spinner").style.display = showSpinner ? "block" : "none";
+  }
+
+  function showRequestId(id) {
+    const box = document.getElementById("requestIdBox");
+    box.style.display = "block";
+    box.textContent = `Request ID: ${id}`;
+  }
+
+  function showResult(text) {
+    document.getElementById("resultCard").style.display = "block";
+    document.getElementById("resultContent").textContent = text;
+    const modeLabel = selectedMode === "1" ? "Anonymized / Pseudonymized output" : "Deanonymized output";
+    document.getElementById("resultLabel").textContent = modeLabel;
+  }
+
+  function copyResult() {
+    navigator.clipboard.writeText(document.getElementById("resultContent").textContent)
+      .then(() => log("Result copied to clipboard.", "ok"))
+      .catch(() => log("Clipboard copy failed.", "err"));
+  }
+
+  function toggleKeyVisibility() {
+    const input = document.getElementById("apiKey");
+    const btn = input.nextElementSibling;
+    if (input.type === "password") { input.type = "text"; btn.textContent = "hide"; }
+    else                           { input.type = "password"; btn.textContent = "show"; }
+  }
+
+  function selectKey(index, btn) {
+    document.querySelectorAll(".key-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    if (index < 2) {
+      document.getElementById("apiKey").value = KEYS[index];
+      document.getElementById("apiKey").type = "password";
+    } else {
+      document.getElementById("apiKey").value = "";
+      document.getElementById("apiKey").type = "text";
+      document.getElementById("apiKey").focus();
+    }
+  }
+
+  function setMode(mode, card) {
+    selectedMode = mode;
+    document.querySelectorAll(".mode-card").forEach(c => c.classList.remove("active"));
+    card.classList.add("active");
+  }
+
+  function clearAll() {
+    document.getElementById("inputText").value = "";
+    document.getElementById("resultCard").style.display = "none";
+    document.getElementById("requestIdBox").style.display = "none";
+    document.getElementById("statusBar").style.display = "none";
+    sessionId = null;
+    msgId = 0;
+    log("Cleared.", "info");
+  }
+
+  // ── MCP Protocol ─────────────────────────────────────────────────────────────
+
+  async function mcpPost(body, sid = null) {
+    const url = document.getElementById("mcpUrl").value.trim();
+    const key = document.getElementById("apiKey").value.trim();
+    const headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json, text/event-stream",
+      "X-API-Key": key,
+    };
+    if (sid) headers["mcp-session-id"] = sid;
+
+    const resp = await fetch(url, { method: "POST", headers, body: JSON.stringify(body) });
+
+    // Try to capture session id from response
+    const newSid = resp.headers.get("mcp-session-id");
+    if (newSid) sessionId = newSid;
+
+    const ct = resp.headers.get("content-type") || "";
+
+    // SSE stream response
+    if (ct.includes("text/event-stream")) {
+      return await readSSE(resp);
+    }
+
+    const text = await resp.text();
+    if (!text.trim()) return null;
+
+    try { return JSON.parse(text); }
+    catch { return { _raw: text }; }
+  }
+
+  async function readSSE(resp) {
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let lastData = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (line.startsWith("data:")) {
+          const raw = line.slice(5).trim();
+          try { lastData = JSON.parse(raw); } catch { /* ignore */ }
+        }
+      }
+    }
+    return lastData;
+  }
+
+  async function mcpInitialize() {
+    msgId = 1;
+    log("Initializing MCP session…", "info");
+    const initReq = {
+      jsonrpc: "2.0",
+      id: msgId++,
+      method: "initialize",
+      params: {
+        protocolVersion: "2024-11-05",
+        capabilities: {},
+        clientInfo: { name: "api-tester", version: "1.0" },
+      },
+    };
+    const initResp = await mcpPost(initReq, null);
+    log(`Initialize response: ${JSON.stringify(initResp)?.slice(0, 120)}`, "ok");
+
+    // Send initialized notification (no id = notification)
+    await mcpPost({ jsonrpc: "2.0", method: "notifications/initialized" }, sessionId);
+    log("Sent initialized notification.", "info");
+  }
+
+  async function mcpCallTool(toolName, args) {
+    const req = {
+      jsonrpc: "2.0",
+      id: msgId++,
+      method: "tools/call",
+      params: { name: toolName, arguments: args },
+    };
+    log(`→ tools/call ${toolName} ${JSON.stringify(args).slice(0, 80)}`, "info");
+    const resp = await mcpPost(req, sessionId);
+    log(`← ${JSON.stringify(resp)?.slice(0, 160)}`, "ok");
+    return resp;
+  }
+
+  function extractToolResult(resp) {
+    if (!resp) return null;
+    // Standard MCP: result.content[0].text
+    if (resp.result?.content?.[0]?.text !== undefined) return resp.result.content[0].text;
+    // Fallback
+    if (resp.result?.data !== undefined) return resp.result.data;
+    if (typeof resp.result === "string") return resp.result;
+    return JSON.stringify(resp);
+  }
+
+  // ── Main flow ─────────────────────────────────────────────────────────────────
+
+  async function submitRequest() {
+    const rawText = document.getElementById("inputText").value.trim();
+    if (!rawText) { setStatus("Please enter some text.", "error"); return; }
+
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = true;
+    document.getElementById("resultCard").style.display = "none";
+    document.getElementById("requestIdBox").style.display = "none";
+    sessionId = null;
+    msgId = 0;
+
+    try {
+      // 1. MCP handshake
+      setStatus("Initializing session…", "running", true);
+      await mcpInitialize();
+
+      // 2. Encode text to base64
+      const b64 = btoa(unescape(encodeURIComponent(rawText)));
+      log(`Text encoded to base64 (${b64.length} chars).`, "info");
+
+      // 3. start_transformation
+      setStatus("Starting transformation…", "running", true);
+      const startResp = await mcpCallTool("start_transformation", { text: b64, mode: selectedMode });
+      const requestId = extractToolResult(startResp);
+
+      if (!requestId || requestId === "Unauthorized") {
+        setStatus("Authentication failed. Check your API key.", "error");
+        log("Authentication failed.", "err");
+        return;
+      }
+
+      showRequestId(requestId);
+      log(`Got request ID: ${requestId}`, "ok");
+
+      // 4. Poll retrieve_result
+      setStatus(`Processing… (request ${requestId.slice(0, 8)}…)`, "running", true);
+      polling = true;
+      let attempts = 0;
+      const maxAttempts = 120;
+
+      while (polling && attempts < maxAttempts) {
+        await sleep(2000);
+        attempts++;
+        const retrieveResp = await mcpCallTool("retrieve_result", { request_id: requestId });
+        const data = extractToolResult(retrieveResp);
+        log(`Poll ${attempts}: ${String(data).slice(0, 80)}`, "");
+
+        if (data === "Still processing.") {
+          setStatus(`Processing… (poll ${attempts}/${maxAttempts})`, "running", true);
+          continue;
+        }
+        if (data === "Request ID not found.") {
+          setStatus("Request ID not found on server.", "error");
+          break;
+        }
+
+        // Success
+        showResult(data);
+        const label = selectedMode === "1" ? "Anonymization + Pseudonymization" : "Deanonymization";
+        setStatus(`${label} complete.`, "success");
+        log("Done.", "ok");
+        polling = false;
+        return;
+      }
+
+      if (attempts >= maxAttempts) {
+        setStatus("Timed out waiting for result.", "error");
+        log("Polling timed out after max attempts.", "err");
+      }
+
+    } catch (err) {
+      setStatus(`Error: ${err.message}`, "error");
+      log(`Exception: ${err.message}`, "err");
+      console.error(err);
+    } finally {
+      submitBtn.disabled = false;
+    }
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>

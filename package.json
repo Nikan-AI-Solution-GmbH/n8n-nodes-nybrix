@@ -1,0 +1,56 @@
+{
+	"name": "n8n-nodes-nikan-anonymization",
+	"version": "0.1.0",
+	"description": "n8n community node for anonymizing and deanonymizing text via the Nikan Anonymization API",
+	"license": "MIT",
+	"homepage": "https://github.com/nikan-ai/n8n-nodes-nikan-anonymization",
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"anonymization",
+		"deanonymization",
+		"privacy",
+		"nikan"
+	],
+	"author": {
+		"name": "Maximilian Braun",
+		"email": "maximilian.braun@nikan.ai"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nikan-ai/n8n-nodes-nikan-anonymization.git"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/NikanAnonymizationApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Anonymization/Anonymization.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "*",
+		"@types/lodash": "^4.17.24",
+		"eslint": "9.39.4",
+		"prettier": "3.8.3",
+		"release-it": "20.0.1",
+		"typescript": "5.9.3"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}
