@@ -110,12 +110,24 @@ export class Anonymization implements INodeType {
 
 				const sessionId = await mcpInitialize.call(this);
 
-				const startResult = await mcpToolCall.call(
-					this,
-					'start_transformation',
-					{ text: encodedText, mode },
-					sessionId,
-				);
+				let startResult: string;
+				try {
+					startResult = await mcpToolCall.call(
+						this,
+						'start_transformation',
+						{ text: encodedText, mode },
+						sessionId,
+					);
+				} catch (err) {
+					if (/quota exceeded/i.test((err as Error).message)) {
+						throw new NodeOperationError(
+							this.getNode(),
+							'API key quota exceeded. Please rebalance your subscription or contact support at support@nikan.ai.',
+							{ itemIndex: i },
+						);
+					}
+					throw new NodeOperationError(this.getNode(), err as Error, { itemIndex: i });
+				}
 
 				if (startResult === 'Unauthorized') {
 					throw new NodeOperationError(

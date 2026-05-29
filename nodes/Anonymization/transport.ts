@@ -10,7 +10,7 @@ import { NodeOperationError } from 'n8n-workflow';
 interface McpToolResponse {
 	jsonrpc: string;
 	id: number;
-	result?: { content: Array<{ type: string; text: string }> };
+	result?: { content: Array<{ type: string; text: string }>; isError?: boolean };
 	error?: { code: number; message: string };
 }
 
@@ -77,9 +77,6 @@ export async function mcpInitialize(this: McpContext): Promise<string | undefine
 	);
 
 	let sessionId = extractSessionId(initFull);
-	console.log('[MCP] initialize full response type:', typeof initFull);
-	console.log('[MCP] initialize keys:', initFull && typeof initFull === 'object' ? Object.keys(initFull as object).join(', ') : String(initFull));
-	console.log('[MCP] sessionId after initialize:', sessionId);
 
 	// Send notifications/initialized — also capture session ID from its response headers
 	try {
@@ -97,10 +94,8 @@ export async function mcpInitialize(this: McpContext): Promise<string | undefine
 		);
 		const notifSid = extractSessionId(notifFull);
 		if (notifSid) sessionId = notifSid;
-		console.log('[MCP] notification response type:', typeof notifFull);
-		console.log('[MCP] sessionId after notification:', sessionId);
 	} catch (e) {
-		console.log('[MCP] notification error (may be 202 No Content):', (e as Error).message);
+		this.logger.debug(e);
 	}
 
 	return sessionId;
@@ -128,14 +123,11 @@ export async function mcpToolCall(
 		json: true,
 	};
 
-	console.log(`[MCP] tool call "${toolName}" with sessionId:`, sessionId ?? '(none)');
 	const rawResponse = await this.helpers.httpRequestWithAuthentication.call(
 		this,
 		'nikanAnonymizationApi',
 		options,
 	);
-	console.log('[MCP] raw response type:', typeof rawResponse);
-	if (typeof rawResponse === 'string') console.log('[MCP] raw SSE:', rawResponse.slice(0, 300));
 
 	const response = parseResponse(rawResponse);
 
@@ -146,5 +138,9 @@ export async function mcpToolCall(
 		);
 	}
 
-	return response.result?.content?.[0]?.text ?? '';
+	const text = response.result?.content?.[0]?.text ?? '';
+	if (response.result?.isError) {
+		throw new NodeOperationError(this.getNode(), text);
+	}
+	return text;
 }
