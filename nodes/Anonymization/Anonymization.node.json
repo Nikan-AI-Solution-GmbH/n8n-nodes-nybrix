@@ -3,6 +3,7 @@
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["AI", "Utility"],
+	"description": "Anonymize or deanonymize text using the Nikan Anonymization API",
 	"resources": {
 		"credentialDocumentation": [
 			{

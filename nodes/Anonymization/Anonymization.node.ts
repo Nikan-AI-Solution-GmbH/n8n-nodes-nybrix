@@ -14,13 +14,26 @@ export class Anonymization implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Nikan Anonymization',
 		name: 'anonymization',
-		icon: { light: 'file:anonymization.svg', dark: 'file:anonymization.dark.svg' },
+		icon: { light: 'file:reversa_logo_neu_vektorisiert.svg', dark: 'file:reversa_logo_neu_vektorisiert.svg' },
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"]}}',
 		description: 'Anonymize or deanonymize text using the Nikan Anonymization API',
 		defaults: {
 			name: 'Nikan Anonymization',
+		},
+		codex: {
+			categories: ['AI', 'Transform'],
+			subcategories: {
+				AI: ['Text Processing'],
+			},
+			resources: {
+				primaryDocumentation: [
+					{
+						url: 'https://github.com/nikan-ai/n8n-nodes-nikan-anonymization',
+					},
+				],
+			},
 		},
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
