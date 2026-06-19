@@ -2,7 +2,7 @@
 
 ## What this is
 
-`n8n-nodes-nikan-anonymization` is a **TypeScript package** that extends n8n with a custom node for text anonymization and deanonymization. When installed in an n8n instance, the node appears in the node panel and can be used in any workflow.
+`n8n-nodes-nybrix-anonymisation` is a **TypeScript package** that extends n8n with a custom node for text anonymization and deanonymization. When installed in an n8n instance, the node appears in the node panel and can be used in any workflow.
 
 n8n loads community nodes by reading the `n8n` section of the package's `package.json`, then importing the compiled `.js` files from the `dist/` directory at runtime.
 

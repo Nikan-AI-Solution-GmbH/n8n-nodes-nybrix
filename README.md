@@ -1,8 +1,8 @@
 <img src="nodes/Anonymization/nybrix.svg" alt="nybrix" width="80" />
 
-# n8n-nodes-nikan-anonymization
+# nybrix Anonymisation
 
-[![npm version](https://img.shields.io/npm/v/n8n-nodes-nikan-anonymization)](https://www.npmjs.com/package/n8n-nodes-nikan-anonymization)
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-nybrix-anonymisation)](https://www.npmjs.com/package/n8n-nodes-nybrix-anonymisation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 [![n8n Community Node](https://img.shields.io/badge/n8n-community--node-orange)](https://docs.n8n.io/integrations/#community-nodes)
 
@@ -24,7 +24,7 @@ The nybrix Anonymisation Pipeline detects personally identifiable information (P
 
 1. Open your n8n instance
 2. Go to **Settings → Community Nodes → Install**
-3. Enter `n8n-nodes-nikan-anonymization`
+3. Enter `n8n-nodes-nybrix-anonymisation`
 4. Click **Install**
 
 This works for n8n Cloud and self-hosted instances running n8n 1.0.0 or later.
@@ -32,7 +32,7 @@ This works for n8n Cloud and self-hosted instances running n8n 1.0.0 or later.
 ### Manual (self-hosted)
 
 ```bash
-npm install n8n-nodes-nikan-anonymization
+npm install n8n-nodes-nybrix-anonymisation
 ```
 
 Then restart your n8n instance.

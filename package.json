@@ -1,15 +1,17 @@
 {
-	"name": "n8n-nodes-nikan-anonymization",
+	"name": "n8n-nodes-nybrix-anonymisation",
 	"version": "0.1.0",
-	"description": "n8n community node for anonymizing and deanonymizing text via the Nikan Anonymization API",
+	"description": "n8n community node for anonymising and deanonymising text using the nybrix Anonymisation API",
 	"license": "MIT",
-	"homepage": "https://github.com/nikan-ai/n8n-nodes-nikan-anonymization",
+	"homepage": "https://github.com/nikan-ai/n8n-nodes-nybrix-anonymisation",
 	"keywords": [
 		"n8n-community-node-package",
 		"n8n",
+		"anonymisation",
 		"anonymization",
-		"deanonymization",
+		"deanonymisation",
 		"privacy",
+		"nybrix",
 		"nikan"
 	],
 	"author": {
@@ -18,7 +20,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nikan-ai/n8n-nodes-nikan-anonymization.git"
+		"url": "https://github.com/nikan-ai/n8n-nodes-nybrix-anonymisation.git"
 	},
 	"scripts": {
 		"build": "n8n-node build",

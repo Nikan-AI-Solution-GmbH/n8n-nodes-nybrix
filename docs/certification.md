@@ -1,6 +1,6 @@
 # n8n Community Node Certification Checklist
 
-To submit `n8n-nodes-nikan-anonymization` for verification on the n8n Creator Portal, all items below must be complete.
+To submit `n8n-nodes-nybrix-anonymisation` for verification on the n8n Creator Portal, all items below must be complete.
 
 Reference: [Submit community nodes](https://docs.n8n.io/integrations/creating-nodes/deploy/submit-community-nodes/)
 
@@ -10,7 +10,7 @@ Reference: [Submit community nodes](https://docs.n8n.io/integrations/creating-no
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
-| Package name starts with `n8n-nodes-` | ✅ | `n8n-nodes-nikan-anonymization` |
+| Package name starts with `n8n-nodes-` | ✅ | `n8n-nodes-nybrix-anonymisation` |
 | `n8n-community-node-package` keyword in `package.json` | ✅ | Already present |
 | MIT license | ✅ | `LICENSE.md` included |
 | No runtime dependencies | ✅ | All deps are `devDependencies` or `peerDependencies` |
@@ -39,7 +39,7 @@ Reference: [Submit community nodes](https://docs.n8n.io/integrations/creating-no
 2. Open package settings → **Publish access → Trusted Publishers**
 3. Add publisher:
    - Repository owner: your GitHub org/username
-   - Repository name: `n8n-nodes-nikan-anonymization`
+   - Repository name: `n8n-nodes-nybrix-anonymisation`
    - Workflow name: `publish.yml`
 
 ### Releasing a new version
