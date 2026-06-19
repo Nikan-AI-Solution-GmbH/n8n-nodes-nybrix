@@ -12,15 +12,15 @@ const sleep = (ms: number): Promise<void> => new Promise((resolve) => lodashDela
 
 export class Anonymization implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Nikan Anonymization',
+		displayName: 'nybrix Anonymisation',
 		name: 'anonymization',
-		icon: { light: 'file:reversa_logo_neu_vektorisiert.svg', dark: 'file:reversa_logo_neu_vektorisiert.svg' },
+		icon: { light: 'file:nybrix.svg', dark: 'file:nybrix.svg' },
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"]}}',
-		description: 'Anonymize or deanonymize text using the Nikan Anonymization API',
+		description: 'Anonymise or deanonymise text using the nybrix Anonymisation API',
 		defaults: {
-			name: 'Nikan Anonymization',
+			name: 'nybrix Anonymisation',
 		},
 		codex: {
 			categories: ['AI', 'Transform'],
@@ -40,7 +40,7 @@ export class Anonymization implements INodeType {
 		usableAsTool: true,
 		credentials: [
 			{
-				name: 'nikanAnonymizationApi',
+				name: 'nybrixAnonymisationApi',
 				required: true,
 			},
 		],
@@ -52,19 +52,19 @@ export class Anonymization implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Anonymize',
-						value: 'anonymize',
+						name: 'Anonymise',
+						value: 'anonymise',
 						description: 'Replace sensitive entities in text with pseudonyms',
-						action: 'Anonymize text',
+						action: 'Anonymise text',
 					},
 					{
-						name: 'Deanonymize',
-						value: 'deanonymize',
-						description: 'Restore original text from an anonymized version',
-						action: 'Deanonymize text',
+						name: 'Deanonymise',
+						value: 'deanonymise',
+						description: 'Restore original text from an anonymised version',
+						action: 'Deanonymise text',
 					},
 				],
-				default: 'anonymize',
+				default: 'anonymise',
 			},
 			{
 				displayName: 'Text',
@@ -118,7 +118,7 @@ export class Anonymization implements INodeType {
 				const pollingInterval = options.pollingInterval ?? 1000;
 				const maxRetries = options.maxRetries ?? 60;
 
-				const mode = operation === 'anonymize' ? '1' : '2';
+				const mode = operation === 'anonymise' ? '1' : '2';
 				const encodedText = Buffer.from(text, 'utf-8').toString('base64');
 
 				const sessionId = await mcpInitialize.call(this);

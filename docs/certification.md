@@ -19,7 +19,7 @@ Reference: [Submit community nodes](https://docs.n8n.io/integrations/creating-no
 | TypeScript compiles without errors (`npm run build`) | ⬜ | Run before publishing |
 | All lint rules pass (`npm run lint`) | ⬜ | Run before publishing |
 | Light and dark icon SVGs present | ✅ | `anonymization.svg` / `anonymization.dark.svg` |
-| Credential test endpoint configured | ✅ | `tools/list` call in credential test |
+| Credential test endpoint configured | ✅ | MCP `initialize` call in credential test |
 | `continueOnFail` handled in `execute()` | ✅ | Implemented |
 | `NodeOperationError` used for all thrown errors | ✅ | Implemented |
 
@@ -56,8 +56,8 @@ This lints, builds, prompts for a version bump, updates `CHANGELOG.md`, commits,
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
-| README describes what the node does | ⬜ | Update `README.md` using `README_TEMPLATE.md` |
-| README documents credential setup | ⬜ | Point to `docs/setup.md` or inline |
+| README describes what the node does | ✅ | `README.md` complete |
+| README documents credential setup | ✅ | Inline in `README.md` credentials section |
 | `package.json` has non-empty `description`, `author`, `homepage` | ⬜ | Fill in before publishing |
 | `package.json` `repository.url` is set | ⬜ | Set to the GitHub repo URL |
 

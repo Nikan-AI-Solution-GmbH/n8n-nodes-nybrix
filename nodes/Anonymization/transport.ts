@@ -51,12 +51,12 @@ function extractSessionId(full: unknown): string | undefined {
 }
 
 export async function mcpInitialize(this: McpContext): Promise<string | undefined> {
-	const credentials = await this.getCredentials('nikanAnonymizationApi');
+	const credentials = await this.getCredentials('nybrixAnonymisationApi');
 	const apiUrl = (credentials.apiUrl as string).replace(/\/$/, '');
 
 	const initFull = await this.helpers.httpRequestWithAuthentication.call(
 		this,
-		'nikanAnonymizationApi',
+		'nybrixAnonymisationApi',
 		{
 			method: 'POST',
 			url: `${apiUrl}/mcp`,
@@ -68,7 +68,7 @@ export async function mcpInitialize(this: McpContext): Promise<string | undefine
 				params: {
 					protocolVersion: '2024-11-05',
 					capabilities: {},
-					clientInfo: { name: 'n8n-nikan-anonymization', version: '1.0' },
+					clientInfo: { name: 'n8n-nybrix-anonymisation', version: '1.0' },
 				},
 			},
 			json: true,
@@ -82,7 +82,7 @@ export async function mcpInitialize(this: McpContext): Promise<string | undefine
 	try {
 		const notifFull = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'nikanAnonymizationApi',
+			'nybrixAnonymisationApi',
 			{
 				method: 'POST',
 				url: `${apiUrl}/mcp`,
@@ -107,7 +107,7 @@ export async function mcpToolCall(
 	args: IDataObject = {},
 	sessionId?: string,
 ): Promise<string> {
-	const credentials = await this.getCredentials('nikanAnonymizationApi');
+	const credentials = await this.getCredentials('nybrixAnonymisationApi');
 	const apiUrl = (credentials.apiUrl as string).replace(/\/$/, '');
 
 	const options: IHttpRequestOptions = {
@@ -125,7 +125,7 @@ export async function mcpToolCall(
 
 	const rawResponse = await this.helpers.httpRequestWithAuthentication.call(
 		this,
-		'nikanAnonymizationApi',
+		'nybrixAnonymisationApi',
 		options,
 	);
 

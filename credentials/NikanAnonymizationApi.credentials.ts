@@ -7,9 +7,9 @@ import type {
 } from 'n8n-workflow';
 
 export class NikanAnonymizationApi implements ICredentialType {
-	name = 'nikanAnonymizationApi';
+	name = 'nybrixAnonymisationApi';
 
-	displayName = 'Nikan Anonymization API';
+	displayName = 'nybrix Anonymisation API';
 
 	icon: Icon = {
 		light: 'file:../nodes/Anonymization/anonymization.svg',
@@ -23,9 +23,9 @@ export class NikanAnonymizationApi implements ICredentialType {
 			displayName: 'Base URL',
 			name: 'apiUrl',
 			type: 'string',
-			default: 'http://localhost:8000',
-			placeholder: 'https://api.your-org.example.com',
-			description: 'Base URL of the Nikan Anonymization MCP server',
+			default: 'https://api.nybrix.ai',
+			placeholder: 'https://api.nybrix.ai',
+			description: 'Base URL of the nybrix Anonymisation API server',
 		},
 		{
 			displayName: 'API Key',
@@ -62,7 +62,7 @@ export class NikanAnonymizationApi implements ICredentialType {
 				params: {
 					protocolVersion: '2024-11-05',
 					capabilities: {},
-					clientInfo: { name: 'n8n-nikan-anonymization', version: '1.0' },
+					clientInfo: { name: 'n8n-nybrix-anonymisation', version: '1.0' },
 				},
 			},
 		},
