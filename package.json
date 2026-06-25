@@ -1,62 +1,62 @@
 {
-	"name": "n8n-nodes-nybrix-anonymisation",
-	"version": "0.1.0",
-	"description": "n8n community node for anonymising and deanonymising text using the nybrix Anonymisation API",
-	"license": "MIT",
-	"homepage": "https://github.com/nikan-ai/n8n-nodes-nybrix-anonymisation",
-	"keywords": [
-		"n8n-community-node-package",
-		"n8n",
-		"anonymisation",
-		"anonymization",
-		"deanonymisation",
-		"privacy",
-		"nybrix",
-		"nikan"
-	],
-	"author": {
-		"name": "Maximilian Braun",
-		"email": "maximilian.braun@nikan.ai"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/nikan-ai/n8n-nodes-nybrix-anonymisation.git"
-	},
-	"scripts": {
-		"build": "n8n-node build",
-		"build:watch": "tsc --watch",
-		"dev": "n8n-node dev",
-		"lint": "n8n-node lint",
-		"lint:fix": "n8n-node lint --fix",
-		"release": "n8n-node release",
-		"prepublishOnly": "n8n-node prerelease"
-	},
-	"files": [
-		"dist"
-	],
-	"n8n": {
-		"n8nNodesApiVersion": 1,
-		"strict": true,
-		"credentials": [
-			"dist/credentials/NikanAnonymizationApi.credentials.js"
-		],
-		"nodes": [
-			"dist/nodes/Anonymization/Anonymization.node.js"
-		]
-	},
-	"devDependencies": {
-		"@n8n/node-cli": "*",
-		"@types/lodash": "^4.17.24",
-		"eslint": "9.39.4",
-		"prettier": "3.8.3",
-		"release-it": "20.0.1",
-		"typescript": "5.9.3"
-	},
-	"peerDependencies": {
-		"n8n-workflow": "*"
-	},
-	"overrides": {
-		"form-data": "4.0.6",
-		"uuid": "13.0.1"
-	}
+  "name": "n8n-nodes-nybrix-anonymisation",
+  "version": "0.1.0",
+  "description": "n8n community node for anonymising and deanonymising text using the nybrix Anonymisation API",
+  "license": "MIT",
+  "homepage": "https://github.com/nikan-ai/n8n-nodes-nybrix-anonymisation",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "anonymisation",
+    "anonymization",
+    "deanonymisation",
+    "privacy",
+    "nybrix",
+    "nikan"
+  ],
+  "author": {
+    "name": "Maximilian Braun",
+    "email": "maximilian.braun@nikan.ai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nikan-ai/n8n-nodes-nybrix-anonymisation.git"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/NikanAnonymizationApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Anonymization/Anonymization.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "*",
+    "@types/lodash": "^4.17.24",
+    "eslint": "9.39.4",
+    "prettier": "3.8.3",
+    "release-it": "20.0.1",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "overrides": {
+    "form-data": "4.0.6",
+    "uuid": ">=13.0.1"
+  }
 }
