@@ -7,7 +7,8 @@
       "!dist",
       "!dist-ssr",
       "!*_codequality.json",
-      "!.biome_ci.json"
+      "!.biome_ci.json",
+      "!biome.json"
     ]
   },
   "linter": {
