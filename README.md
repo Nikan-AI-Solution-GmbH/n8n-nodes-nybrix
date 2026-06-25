@@ -12,6 +12,8 @@ The nybrix Anonymisation Pipeline detects personally identifiable information (P
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
+> **A note on terminology:** "Anonymisation" is used as the common shorthand throughout this node and its documentation. Technically the process is **pseudonymisation** under Art. 4(5) GDPR — the mapping between original and synthetic values is stored server-side and can be reversed. Processed data therefore remains personal data. See [Important Limitations](#important-limitations) for the full legal context.
+
 ---
 
 [Installation](#installation) · [Getting Started](#getting-started) · [Operations](#operations) · [Credentials](#credentials) · [Supported PII Categories](#supported-pii-categories) · [Supported Formats](#supported-formats) · [Usage](#usage) · [Options Reference](#options-reference) · [Error Handling](#error-handling) · [Data Privacy & Security](#data-privacy--security) · [Important Limitations](#important-limitations) · [Compatibility](#compatibility) · [Resources](#resources) · [Version History](#version-history)
