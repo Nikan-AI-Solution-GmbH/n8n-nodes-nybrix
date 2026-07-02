@@ -233,8 +233,6 @@ For the full per-document and per-entity breakdown, see [docs/evaluation-report.
 
 ### Basic anonymise → deanonymise workflow
 
-![Workflow canvas: trigger → anonymise → deanonymise](docs/images/flow.png)
-
 1. Add a **Manual Trigger** node
 2. Add a **nybrix Anonymisation** node — set **Operation** to `Anonymise` and **Text** to your input (or `{{ $json.text }}` from an upstream node)
 3. Add a second **nybrix Anonymisation** node — set **Operation** to `Deanonymise` and **Text** to `{{ $json.result }}`
