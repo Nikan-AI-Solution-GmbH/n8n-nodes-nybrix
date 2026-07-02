@@ -37,7 +37,7 @@ npm run build
 npm link
 ```
 
-This creates a global symlink: `{npm-global}/lib/node_modules/n8n-nodes-nikan-anonymization → /path/to/n8nnode-app`
+This creates a global symlink: `{npm-global}/lib/node_modules/n8n-nodes-nybrix-anonymisation → /path/to/n8nnode-app`
 
 ### Step 3 — Set up n8n's custom nodes folder
 
@@ -51,10 +51,10 @@ cd ~/.n8n/custom
 [ -f package.json ] || npm init -y
 
 # Pull in the global link
-npm link n8n-nodes-nikan-anonymization
+npm link n8n-nodes-nybrix-anonymisation
 ```
 
-After this, `~/.n8n/custom/node_modules/n8n-nodes-nikan-anonymization` is a symlink to your project's build output.
+After this, `~/.n8n/custom/node_modules/n8n-nodes-nybrix-anonymisation` is a symlink to your project's build output.
 
 ### Step 4 — Start (or restart) n8n
 
@@ -75,7 +75,7 @@ For **Docker**, see the volume-mount approach in [testing.md](testing.md#option-
 Open your n8n instance, create a new workflow, and search for **Nikan Anonymization** in the node palette. If it does not appear:
 
 - Confirm `npm run build` succeeded (no TypeScript errors)
-- Confirm `~/.n8n/custom/node_modules/n8n-nodes-nikan-anonymization` exists and is a symlink to the correct directory
+- Confirm `~/.n8n/custom/node_modules/n8n-nodes-nybrix-anonymisation` exists and is a symlink to the correct directory
 - Restart n8n
 
 ### Updating after code changes

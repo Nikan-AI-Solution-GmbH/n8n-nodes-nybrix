@@ -1,0 +1,20 @@
+stages:
+  - security
+  - quality
+  - mirror
+
+include:
+  - component: ${CI_SERVER_FQDN}/templates/pipeline-templates/security@main
+  - component: ${CI_SERVER_FQDN}/templates/pipeline-templates/quality@main
+
+mirror-to-github:
+  stage: mirror
+  image: alpine/git:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - git remote add github https://x-access-token:${GITHUB_TOKEN}@github.com/Nikan-AI-Solution-GmbH/n8n-nodes-nybrix.git
+    - git push github HEAD:main --force
+  variables:
+    GIT_STRATEGY: clone
+    GIT_DEPTH: 0
