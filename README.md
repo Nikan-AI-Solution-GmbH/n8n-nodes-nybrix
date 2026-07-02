@@ -16,7 +16,7 @@ The nybrix Anonymisation Pipeline detects personally identifiable information (P
 
 ---
 
-[Installation](#installation) · [Getting Started](#getting-started) · [Operations](#operations) · [Credentials](#credentials) · [Supported PII Categories](#supported-pii-categories) · [Supported Formats](#supported-formats) · [Usage](#usage) · [Options Reference](#options-reference) · [Error Handling](#error-handling) · [Data Privacy & Security](#data-privacy--security) · [Important Limitations](#important-limitations) · [Compatibility](#compatibility) · [Resources](#resources) · [Version History](#version-history)
+[Installation](#installation) · [Getting Started](#getting-started) · [Operations](#operations) · [Credentials](#credentials) · [Supported PII Categories](#supported-pii-categories) · [Detection Accuracy](#detection-accuracy) · [Supported Formats](#supported-formats) · [Usage](#usage) · [Options Reference](#options-reference) · [Error Handling](#error-handling) · [Data Privacy & Security](#data-privacy--security) · [Important Limitations](#important-limitations) · [Compatibility](#compatibility) · [Resources](#resources) · [Version History](#version-history)
 
 ---
 
@@ -154,16 +154,65 @@ The Base URL is pre-filled with `https://api.nybrix.ai` — no change needed for
 
 ## Supported PII Categories
 
-The AI model detects and pseudonymises the following categories of personal data in free-text documents:
+The AI model detects and pseudonymises personal data in free-text documents. Detection reliability varies by entity type. The table below reflects measured performance across an independent evaluation of 475 entities spanning 60 documents and 9 document types (see [docs/evaluation-report.md](docs/evaluation-report.md) for the full results).
 
-| Category | Examples |
+### Core entities — reliably detected (≥ 97% recall)
+
+| Category | Entity types |
 |---|---|
-| Identification data | First and last names, pseudonyms, usernames |
-| Contact data | Postal addresses, email addresses, phone numbers, fax numbers |
-| Financial data | IBAN, credit card numbers, bank account numbers |
-| Digital identifiers | IP addresses, user IDs, cookie IDs |
+| **Person identity** | Full names, dates of birth, national ID numbers, passport numbers, SSNs / tax IDs |
+| **Contact** | Postal addresses (street, city, state, ZIP/postcode), email addresses, phone numbers |
+| **Financial** | IBAN, bank account numbers, credit card numbers |
+| **Digital identifiers** | IP addresses, user IDs, cookie IDs |
+
+### Contextual entities — partially detected (variable recall)
+
+| Entity type | Typical recall | Notes |
+|---|---|---|
+| Country names | ~73% | May be missed when used as adjectives or in formal titles |
+| Standalone dates | ~80% | Dates appearing in isolation without a person-linking context |
+| Ages | ~80% | Numeric ages (e.g. "45 years old") occasionally missed |
+
+### Not currently detected
+
+The following entity types are **not reliably pseudonymised** at this time:
+
+- **Company / organisation names** — rarely detected (< 7% recall in evaluation)
+- **Job titles and role names** — not detected (0% recall in evaluation)
+
+If your documents contain company names or job titles that must be protected, apply a pre-processing step or manual review before passing the text to this node.
 
 Within a single API call, the same PII entity always maps to the same pseudonym. Across separate calls, consistency is maintained via the server-side mapping table as long as the same API key is used.
+
+---
+
+## Detection Accuracy
+
+An independent evaluation run on 2026-06-30 tested the pipeline across 60 documents and 7 real-world scenario configurations (financial crime, healthcare, customer support, HR, rental, clinical intake, and international/passport documents). 475 labeled PII entities were evaluated.
+
+| Metric | Result |
+|---|---|
+| **Critical-PII recall** | **99.6%** — names, emails, phones, addresses, national IDs, SSNs, passports, dates of birth, credit cards, IBANs |
+| **Overall recall** | **93.3%** — all entity types including low-salience contextual entities |
+| **Round-trip deanonymisation** | **97.3%** — pseudonymised documents successfully restored to original values |
+
+**Performance by scenario:**
+
+| Scenario | Overall Recall | Round-trip |
+|---|---|---|
+| Financial Crime & Legal | 100.0% | 100.0% |
+| Customer Support | 100.0% | 96.7% |
+| Rental & Housing | 100.0% | 100.0% |
+| Clinical Patient Intake | 99.0% | 100.0% |
+| Healthcare & Insurance | 98.1% | 99.4% |
+| European & International | 96.3% | 86.8% |
+| Career & Employment | 87.6% ¹ | 99.5% |
+
+¹ Lower overall recall in this scenario is driven entirely by company names and job titles (0–7% recall); all high-criticality PII was detected at 100%.
+
+**A note on over-anonymisation:** The pipeline errs on the side of caution. Some domain-specific phrases that are not PII (e.g. procedural terms like "account freeze" or "referral letter") may also be replaced with synthetic substitutes. The document remains grammatically coherent and the structure is preserved — the substituted phrases are simply fictional equivalents rather than the original text. For downstream processing, treat the anonymised output as authoritative and deanonymise only when you need to recover original values.
+
+For the full per-document and per-entity breakdown, see [docs/evaluation-report.md](docs/evaluation-report.md).
 
 ---
 
@@ -264,7 +313,7 @@ A Data Processing Agreement (DPA) in accordance with Art. 28 GDPR must be conclu
 
 - **Pseudonymisation, not anonymisation:** The output is pseudonymised data under Art. 4(5) GDPR — *not* anonymised data under Recital 26. As long as the mapping table exists on the server, the processed data remains personal data. This product does not replace a Data Protection Impact Assessment (DPIA) by the data controller.
 
-- **Probabilistic AI detection:** There is no guarantee of complete or error-free detection of all PII entities. False negatives (missed PII) and false positives (non-PII flagged as PII) can occur. For workflows involving special-category data (Art. 9 GDPR), a human reviewer is mandatory.
+- **Probabilistic AI detection:** There is no guarantee of complete or error-free detection of all PII entities. Measured recall for critical-PII categories (names, contact details, financial identifiers, national IDs) is 99.6% across an independent 60-document evaluation, but misses can and do occur — especially for lower-salience contextual entities. **Company names and job titles are not reliably detected** (< 7% and 0% recall respectively). Country names (~73%), standalone dates (~80%), and ages (~80%) have reduced coverage. The pipeline also over-anonymises some non-PII phrases (domain-specific terminology may be pseudonymised along with true PII). For workflows involving special-category data (Art. 9 GDPR), a human reviewer is mandatory.
 
 - **Prohibited use cases:** The product must not be used in high-risk AI contexts under Annex III of the EU AI Act — including employment, education, creditworthiness assessment, law enforcement, migration, justice, critical infrastructure, or biometrics. Medical or pharmaceutical research with patient data requires a separate written agreement.
 
@@ -301,6 +350,7 @@ Compatible with n8n Cloud, self-hosted deployments, and the local development se
 - [Internals deep-dive](docs/internals.md)
 - [Testing guide](docs/testing.md)
 - [Certification checklist](docs/certification.md)
+- [Detection accuracy evaluation report](docs/evaluation-report.md)
 
 ---
 
