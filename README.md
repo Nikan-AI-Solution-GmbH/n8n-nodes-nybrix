@@ -1,93 +1,365 @@
-# n8nnode-app
+<img src="nodes/Anonymization/nybrix.svg" alt="nybrix" width="80" />
 
+# nybrix Anonymisation
 
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-nybrix-anonymisation)](https://www.npmjs.com/package/n8n-nodes-nybrix-anonymisation)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[![n8n Community Node](https://img.shields.io/badge/n8n-community--node-orange)](https://docs.n8n.io/integrations/#community-nodes)
 
-## Getting started
+Anonymise and deanonymise text in n8n workflows using the **nybrix Anonymisation Pipeline** — AI-powered PII detection with full reversibility.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The nybrix Anonymisation Pipeline detects personally identifiable information (PII) in free-text documents — names, addresses, financial identifiers, and more — and replaces each entity with a consistent synthetic substitute, making documents safe to share, store, or pass to LLMs without violating data protection requirements. The same node can reverse the process, restoring original values on demand via an encrypted server-side mapping table. All data is processed exclusively within the EU.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
-## Add your files
+> **A note on terminology:** "Anonymisation" is used as the common shorthand throughout this node and its documentation. Technically the process is **pseudonymisation** under Art. 4(5) GDPR — the mapping between original and synthetic values is stored server-side and can be reversed. Processed data therefore remains personal data. See [Important Limitations](#important-limitations) for the full legal context.
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+---
 
-```
-cd existing_repo
-git remote add origin https://gitlab.nikan.ai/pub-anonymization/n8nnode-app.git
-git branch -M main
-git push -uf origin main
-```
+[Installation](#installation) · [Getting Started](#getting-started) · [Operations](#operations) · [Credentials](#credentials) · [Supported PII Categories](#supported-pii-categories) · [Detection Accuracy](#detection-accuracy) · [Supported Formats](#supported-formats) · [Usage](#usage) · [Options Reference](#options-reference) · [Error Handling](#error-handling) · [Data Privacy & Security](#data-privacy--security) · [Important Limitations](#important-limitations) · [Compatibility](#compatibility) · [Resources](#resources) · [Version History](#version-history)
 
-## Integrate with your tools
-
-* [Set up project integrations](https://gitlab.nikan.ai/pub-anonymization/n8nnode-app/-/settings/integrations)
-
-## Collaborate with your team
-
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+---
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+
+### From the n8n UI (recommended)
+
+1. Open your n8n instance
+2. Go to **Settings → Community Nodes → Install**
+3. Enter `n8n-nodes-nybrix-anonymisation`
+4. Click **Install**
+
+This works for n8n Cloud and self-hosted instances running n8n 1.0.0 or later.
+
+### Manual (self-hosted)
+
+```bash
+npm install n8n-nodes-nybrix-anonymisation
+```
+
+Then restart your n8n instance.
+
+### Development
+
+See [docs/setup.md](docs/setup.md) for the local development workflow (`npm run dev`).
+
+---
+
+## Getting Started
+
+You need a Nikan AI account and an active API key before the node can process any requests.
+
+### 1. Register on the Nikan AI Platform
+
+Create an account at [console.nikan.ai](https://console.nikan.ai).
+
+### 2. Set Up Your Organisation
+
+After registering, create a **Company** profile and add a **User** account linked to it.
+
+### 3. Get Credits
+
+New accounts include a starter token balance. Additional tokens can be purchased at any time through the Key Management Portal. The n8n node itself is free — you only pay for the tokens consumed by the API when processing documents.
+
+### 4. Activate the Product
+
+In the Key Management Portal, activate the **Anonymisation Pipeline** product for your organisation.
+
+### 5. Generate an API Key
+
+Create an API key in the portal. Copy it — you will enter it as a credential in n8n.
+
+> **Important:** Your API key is used to derive the encryption key for your mapping table. If you rotate your API key, previously stored mappings become undecryptable and deanonymisation of older documents will not be possible. Keep your key safe and plan rotations carefully.
+
+### 6. Add the Node to Your Workflow
+
+In n8n, search for **nybrix Anonymisation** in the nodes panel, drag it into your workflow, and configure the credential (see [Credentials](#credentials) below).
+
+---
+
+## Operations
+
+| Operation | Description | Notes |
+|---|---|---|
+| **Anonymise** | Detects PII in the input text and replaces each entity with a consistent synthetic substitute. Returns a pseudonymised document and a `requestId` for later deanonymisation. | Uses an async queue — the node polls until the result is ready. |
+| **Deanonymise** | Restores the original values in a previously pseudonymised document using the encrypted server-side mapping table. | Deterministic DB lookup — no AI involved. Requires the `requestId` from the original anonymise call (pass it as part of the text or workflow context). |
+
+**Output JSON shape**
+
+```json
+{
+  "requestId": "01a381fb-2c13-450e-b82d-9e55ef59ffb2",
+  "result": "Dear Mr. Erik Müller, thank you for your enquiry dated 12 June 2026. ...",
+  "operation": "anonymise"
+}
+```
+
+Store the `requestId` in your workflow if you need to deanonymise the same text later — it links the synthetic substitutes back to the original values on the server.
+
+**Example**
+
+The pipeline replaces each PII entity with a **realistic synthetic substitute** — the document remains fluent and natural, not filled with placeholder tokens.
+
+Input:
+
+```
+Dear Mr. Thomas Berger, thank you for your enquiry dated 12 June 2026.
+Please find the invoice attached. A total of EUR 2,340.00 has been debited
+from account DE89 3704 0044 0532 0130 00. If you have any questions, please
+contact our support team at t.berger@example.de or call +49 89 123 456 78.
+Your shipment will be delivered to Rosenthaler Str. 40, 10178 Berlin.
+Your session token was issued to IP 192.168.47.23.
+```
+
+Anonymised `result`:
+
+```
+Dear Mr. Erik Müller, thank you for your enquiry dated 12 June 2026.
+Please find the invoice attached. A total of EUR 2,340.00 has been debited
+from account DE12 3456 7890 1234 5678 90. If you have any questions, please
+contact our support team at erik.mueller@fiktivmail.de or call +49 30 9876 5432.
+Your shipment will be delivered to Königsallee 12, 11223 Dresden.
+Your session token was issued to IP 203.0.113.99.
+```
+
+![nybrix Anonymisation node — anonymise operation with output](docs/images/anonymise_1.png)
+
+---
+
+## Credentials
+
+The node authenticates with the nybrix Anonymisation API using the **nybrix Anonymisation API** credential type.
+
+**Required fields**
+
+| Field | Description |
+|---|---|
+| Base URL | The URL of the nybrix Anonymisation API server (pre-filled: `https://api.nybrix.ai`) |
+| API Key | Your `X-API-Key` value from the Nikan AI Key Management Portal |
+
+**To configure**
+
+1. In n8n, go to **Credentials → New credential**
+2. Search for **nybrix Anonymisation API**
+3. Enter the **Base URL** of your deployment
+4. Paste your **API Key**
+5. Click **Test** — n8n pings the server to verify connectivity
+6. Click **Save**
+
+The Base URL is pre-filled with `https://api.nybrix.ai` — no change needed for production use. For local development, replace it with your local server URL (e.g. `http://localhost:8000`).
+
+![nybrix Anonymisation API credential — connection tested successfully](docs/images/creds.png)
+
+---
+
+## Supported PII Categories
+
+The AI model detects and pseudonymises personal data in free-text documents. Detection reliability varies by entity type. The table below reflects measured performance across an independent evaluation of 475 entities spanning 60 documents and 9 document types (see [docs/evaluation-report.md](docs/evaluation-report.md) for the full results).
+
+### Core entities — reliably detected (≥ 97% recall)
+
+| Category | Entity types |
+|---|---|
+| **Person identity** | Full names, dates of birth, national ID numbers, passport numbers, SSNs / tax IDs |
+| **Contact** | Postal addresses (street, city, state, ZIP/postcode), email addresses, phone numbers |
+| **Financial** | IBAN, bank account numbers, credit card numbers |
+| **Digital identifiers** | IP addresses, user IDs, cookie IDs |
+
+### Contextual entities — partially detected (variable recall)
+
+| Entity type | Typical recall | Notes |
+|---|---|---|
+| Country names | ~73% | May be missed when used as adjectives or in formal titles |
+| Standalone dates | ~80% | Dates appearing in isolation without a person-linking context |
+| Ages | ~80% | Numeric ages (e.g. "45 years old") occasionally missed |
+
+### Not currently detected
+
+The following entity types are **not reliably pseudonymised** at this time:
+
+- **Company / organisation names** — rarely detected (< 7% recall in evaluation)
+- **Job titles and role names** — not detected (0% recall in evaluation)
+
+If your documents contain company names or job titles that must be protected, apply a pre-processing step or manual review before passing the text to this node.
+
+Within a single API call, the same PII entity always maps to the same pseudonym. Across separate calls, consistency is maintained via the server-side mapping table as long as the same API key is used.
+
+---
+
+## Detection Accuracy
+
+An independent evaluation run on 2026-06-30 tested the pipeline across 60 documents and 7 real-world scenario configurations (financial crime, healthcare, customer support, HR, rental, clinical intake, and international/passport documents). 475 labeled PII entities were evaluated.
+
+| Metric | Result |
+|---|---|
+| **Critical-PII recall** | **99.6%** — names, emails, phones, addresses, national IDs, SSNs, passports, dates of birth, credit cards, IBANs |
+| **Overall recall** | **93.3%** — all entity types including low-salience contextual entities |
+| **Round-trip deanonymisation** | **97.3%** — pseudonymised documents successfully restored to original values |
+
+**Performance by scenario:**
+
+| Scenario | Overall Recall | Round-trip |
+|---|---|---|
+| Financial Crime & Legal | 100.0% | 100.0% |
+| Customer Support | 100.0% | 96.7% |
+| Rental & Housing | 100.0% | 100.0% |
+| Clinical Patient Intake | 99.0% | 100.0% |
+| Healthcare & Insurance | 98.1% | 99.4% |
+| European & International | 96.3% | 86.8% |
+| Career & Employment | 87.6% ¹ | 99.5% |
+
+¹ Lower overall recall in this scenario is driven entirely by company names and job titles (0–7% recall); all high-criticality PII was detected at 100%.
+
+**A note on over-anonymisation:** The pipeline errs on the side of caution. Some domain-specific phrases that are not PII (e.g. procedural terms like "account freeze" or "referral letter") may also be replaced with synthetic substitutes. The document remains grammatically coherent and the structure is preserved — the substituted phrases are simply fictional equivalents rather than the original text. For downstream processing, treat the anonymised output as authoritative and deanonymise only when you need to recover original values.
+
+For the full per-document and per-entity breakdown, see [docs/evaluation-report.md](docs/evaluation-report.md).
+
+---
+
+## Supported Formats
+
+| Format | Input | Output |
+|---|---|---|
+| Plain text (UTF-8) | ✓ | ✓ |
+| Base64-encoded text | ✓ | ✓ |
+| JSON (structured fields) | ✓ | ✓ |
+| PDF / DOCX (native binary) | — | — |
+
+**Working with PDF and Office documents:** The node processes text input. To anonymise a PDF or Word document, add a text-extraction step before this node in your workflow (e.g., an **Extract from PDF** community node), pass the extracted text to the nybrix Anonymisation node, then optionally repackage the result.
+
+---
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### Basic anonymise → deanonymise workflow
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+1. Add a **Manual Trigger** node
+2. Add a **nybrix Anonymisation** node — set **Operation** to `Anonymise` and **Text** to your input (or `{{ $json.text }}` from an upstream node)
+3. Add a second **nybrix Anonymisation** node — set **Operation** to `Deanonymise` and **Text** to `{{ $json.result }}`
+4. Execute — the second node's `result` will match the original input exactly
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+![nybrix Anonymisation node — deanonymise restoring original text](docs/images/deanonymise_1.png)
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+### Using the node as an AI Agent tool
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+The node has `usableAsTool: true`, which means it can be attached to an **AI Agent** node in n8n as a callable tool. The agent can invoke anonymisation on any text before passing it to an LLM, ensuring sensitive data never reaches external model providers. After the LLM call, the agent can deanonymise the response to restore original values — a complete privacy-preserving LLM pipeline.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### Language support and accuracy
+
+- **English** is the primary language with the highest detection accuracy
+- **German** is supported in beta
+- Other languages are experimental — detection quality may vary
+- Detection quality may also be lower on very short texts, tabular data, or highly structured content such as source code
+
+---
+
+## Options Reference
+
+Open the **Options** section in the node to configure polling behaviour:
+
+| Option | Default | Description |
+|---|---|---|
+| Max Retries | `60` | Maximum number of status polls before the node times out |
+| Polling Interval (Ms) | `1000` | Milliseconds to wait between status polls |
+
+**Timeout** = `maxRetries × pollingInterval ÷ 1000` seconds. The default is 60 × 1,000 ms = **60 seconds**.
+
+For long documents or high server load, increase **Max Retries** and/or **Polling Interval**.
+
+---
+
+## Error Handling
+
+### Continue on Fail
+
+Enable **Continue on Fail** in the node settings (the gear icon) to prevent a single failed item from stopping the entire workflow. Failed items will include an `error` field instead of a `result`:
+
+```json
+{ "error": "Authentication failed. Check your API key." }
+```
+
+### Error conditions
+
+| Message | Cause | Resolution |
+|---|---|---|
+| `Authentication failed. Check your API key.` | Invalid or missing API key | Verify your credential in n8n |
+| `API key quota exceeded.` | Token balance exhausted | Recharge credits at console.nikan.ai or contact support@nikan.ai |
+| `Request ID not found on server.` | Job expired before result was retrieved | Reduce polling interval or retry the full operation |
+| `Transformation timed out after N attempts` | Server took longer than the configured timeout | Increase Max Retries or Polling Interval in Options |
+
+---
+
+## Data Privacy & Security
+
+| Parameter | Details |
+|---|---|
+| GDPR role of provider | Data Processor (Art. 28 GDPR) — customers are the data controllers |
+| Processing location | EU only — Scaleway, Paris, France (ISO 27001-certified data centre) |
+| Third-country transfers | None — all data stays in the EEA |
+| Mapping table retention | Stored persistently (encrypted) to enable deanonymisation; deleted on request by the controller; backup propagation within 24 h |
+| Input / output retention | Input and intermediate files: deleted immediately after processing. Output: deleted after 24 h |
+| Sub-processors | Scaleway S.A.S. (hosting + database), Scaleway AI LLM Endpoint — full list in DPA Annex 3 |
+| AI training with customer data | **Explicitly prohibited** — customer data is never used for model training |
+| Transport encryption | TLS 1.3 for all connections |
+| Encryption at rest | Fernet (AES-128-CBC + HMAC-SHA256), key derived from the organisation's API key |
+
+A Data Processing Agreement (DPA) in accordance with Art. 28 GDPR must be concluded before productive use. All compliance documents are available at [nikan.ai](https://nikan.ai).
+
+---
+
+## Important Limitations
+
+- **Pseudonymisation, not anonymisation:** The output is pseudonymised data under Art. 4(5) GDPR — *not* anonymised data under Recital 26. As long as the mapping table exists on the server, the processed data remains personal data. This product does not replace a Data Protection Impact Assessment (DPIA) by the data controller.
+
+- **Probabilistic AI detection:** There is no guarantee of complete or error-free detection of all PII entities. Measured recall for critical-PII categories (names, contact details, financial identifiers, national IDs) is 99.6% across an independent 60-document evaluation, but misses can and do occur — especially for lower-salience contextual entities. **Company names and job titles are not reliably detected** (< 7% and 0% recall respectively). Country names (~73%), standalone dates (~80%), and ages (~80%) have reduced coverage. The pipeline also over-anonymises some non-PII phrases (domain-specific terminology may be pseudonymised along with true PII). For workflows involving special-category data (Art. 9 GDPR), a human reviewer is mandatory.
+
+- **Prohibited use cases:** The product must not be used in high-risk AI contexts under Annex III of the EU AI Act — including employment, education, creditworthiness assessment, law enforcement, migration, justice, critical infrastructure, or biometrics. Medical or pharmaceutical research with patient data requires a separate written agreement.
+
+- **One API key per controller:** Multi-controller pooling under a single API key is not permitted. Each data controller must use their own API key and sign their own Data Processing Agreement.
+
+- **API key rotation:** Rotating your API key will make previously stored mapping entries undecryptable. Plan key rotations carefully and ensure all active pseudonymised documents are deanonymised beforehand.
+
+---
+
+## Compatibility
+
+- **Minimum n8n version:** 1.0.0
+- **Tested against:** n8n 1.x
+- **Node.js:** v22 or higher (for local development)
+- **n8n Nodes API version:** 1
+
+Compatible with n8n Cloud, self-hosted deployments, and the local development server (`npm run dev`).
+
+---
+
+## Resources
+
+- [Nikan AI Key Management Portal](https://console.nikan.ai)
+- [Compliance Documents (DPA, Privacy Policy, EULA)](https://nikan.ai)
+- [Support: support@nikan.ai](mailto:support@nikan.ai)
+- [Security incidents: security@nikan.ai](mailto:security@nikan.ai)
+- [n8n Community Nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
+
+**Developer documentation** (this repo):
+
+- [Setup guide](docs/setup.md)
+- [API reference](docs/api-reference.md)
+- [Architecture](docs/architecture.md)
+- [Internals deep-dive](docs/internals.md)
+- [Testing guide](docs/testing.md)
+- [Certification checklist](docs/certification.md)
+- [Detection accuracy evaluation report](docs/evaluation-report.md)
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---|---|---|
+| 0.1.0 | 2026-06 | Initial release — Anonymise and Deanonymise operations over the nybrix Anonymisation API (JSON-RPC 2.0 / StreamableHttp transport) |
+
+---
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+[MIT](LICENSE.md)

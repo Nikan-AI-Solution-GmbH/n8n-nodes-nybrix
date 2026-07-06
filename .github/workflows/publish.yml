@@ -1,0 +1,18 @@
+publish:
+  stage: release
+  image: node:22
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - npm ci
+    - npm run build
+    - |
+      PUBLISHED=$(npm view $npm_package_name version 2>/dev/null || echo "0.0.0")
+      LOCAL=$(node -p "require('./package.json').version")
+      if [ "$PUBLISHED" = "$LOCAL" ]; then
+        echo "Version $LOCAL already published, skipping."
+        exit 0
+      fi
+    - npm publish --access public
+  variables:
+    NODE_AUTH_TOKEN: $NPM_TOKEN
