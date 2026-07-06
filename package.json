@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-nybrix-anonymisation",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "description": "n8n community node for anonymising and deanonymising text using the nybrix Anonymisation API",
   "license": "MIT",
   "homepage": "https://github.com/Nikan-AI-Solution-GmbH/n8n-nodes-nybrix",
