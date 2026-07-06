@@ -16,7 +16,7 @@ export class NikanAnonymizationApi implements ICredentialType {
     dark: "file:../nodes/Anonymization/anonymization.dark.svg",
   };
 
-  documentationUrl = "https://github.com/nikan-ai/n8n-nodes-nybrix-anonymisation#credentials";
+  documentationUrl = "https://github.com/Nikan-AI-Solution-GmbH/n8n-nodes-nybrix#credentials";
 
   properties: INodeProperties[] = [
     {

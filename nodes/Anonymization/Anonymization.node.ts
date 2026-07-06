@@ -30,7 +30,7 @@ export class Anonymization implements INodeType {
       resources: {
         primaryDocumentation: [
           {
-            url: "https://github.com/nikan-ai/n8n-nodes-nybrix-anonymisation",
+            url: "https://github.com/Nikan-AI-Solution-GmbH/n8n-nodes-nybrix",
           },
         ],
       },
