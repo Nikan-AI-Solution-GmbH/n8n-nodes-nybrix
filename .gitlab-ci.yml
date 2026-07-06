@@ -9,7 +9,9 @@ include:
 
 mirror-to-github:
   stage: mirror
-  image: alpine/git:latest
+  image:
+    name: alpine/git:latest
+    entrypoint: [""]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   script:
