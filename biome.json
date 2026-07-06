@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.2/schema.json",
   "files": {
     "includes": [
       "**",
@@ -8,7 +8,8 @@
       "!dist-ssr",
       "!*_codequality.json",
       "!.biome_ci.json",
-      "!biome.json"
+      "!biome.json",
+      "!eslint.config.mjs"
     ]
   },
   "linter": {

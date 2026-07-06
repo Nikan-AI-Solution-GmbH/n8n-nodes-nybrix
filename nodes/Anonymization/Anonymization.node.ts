@@ -14,7 +14,7 @@ export class Anonymization implements INodeType {
   description: INodeTypeDescription = {
     displayName: "nybrix Anonymisation",
     name: "anonymization",
-    icon: { light: "file:nybrix.svg", dark: "file:nybrix.svg" },
+    icon: { light: "file:anonymization.svg", dark: "file:anonymization.dark.svg" },
     group: ["transform"],
     version: 1,
     subtitle: '={{$parameter["operation"]}}',

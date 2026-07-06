@@ -9,7 +9,7 @@ import type {
 export class NikanAnonymizationApi implements ICredentialType {
   name = "nybrixAnonymisationApi";
 
-  displayName = "nybrix Anonymisation API";
+  displayName = "Nybrix Anonymisation API";
 
   icon: Icon = {
     light: "file:../nodes/Anonymization/anonymization.svg",
