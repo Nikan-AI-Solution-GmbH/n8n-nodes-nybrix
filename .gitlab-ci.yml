@@ -4,7 +4,7 @@ stages:
   - mirror
 
 include:
-  - component: ${CI_SERVER_FQDN}/templates/pipeline-templates/security@main
+  # - component: ${CI_SERVER_FQDN}/templates/pipeline-templates/security@main
   - component: ${CI_SERVER_FQDN}/templates/pipeline-templates/quality@main
 
 mirror-to-github:
