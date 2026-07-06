@@ -16,3 +16,4 @@ publish:
     - npm publish --access public
   variables:
     NODE_AUTH_TOKEN: $NPM_TOKEN
+
