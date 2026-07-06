@@ -42,7 +42,7 @@ npm link
 docker run -d --name n8n-dev \
   -p 5680:5678 \
   -e N8N_COMMUNITY_PACKAGES_ENABLED=true \
-  -v ~/.n8n/custom/node_modules/n8n-nodes-nikan-anonymization:/home/node/.n8n/custom/node_modules/n8n-nodes-nikan-anonymization \
+  -v ~/.n8n/custom/node_modules/n8n-nodes-nybrix-anonymisation:/home/node/.n8n/custom/node_modules/n8n-nodes-nybrix-anonymisation \
   n8nio/n8n
 ```
 

@@ -1,6 +1,6 @@
 # n8n Community Node Certification Checklist
 
-To submit `n8n-nodes-nikan-anonymization` for verification on the n8n Creator Portal, all items below must be complete.
+To submit `n8n-nodes-nybrix-anonymisation` for verification on the n8n Creator Portal, all items below must be complete.
 
 Reference: [Submit community nodes](https://docs.n8n.io/integrations/creating-nodes/deploy/submit-community-nodes/)
 
@@ -10,7 +10,7 @@ Reference: [Submit community nodes](https://docs.n8n.io/integrations/creating-no
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
-| Package name starts with `n8n-nodes-` | ✅ | `n8n-nodes-nikan-anonymization` |
+| Package name starts with `n8n-nodes-` | ✅ | `n8n-nodes-nybrix-anonymisation` |
 | `n8n-community-node-package` keyword in `package.json` | ✅ | Already present |
 | MIT license | ✅ | `LICENSE.md` included |
 | No runtime dependencies | ✅ | All deps are `devDependencies` or `peerDependencies` |
@@ -19,7 +19,7 @@ Reference: [Submit community nodes](https://docs.n8n.io/integrations/creating-no
 | TypeScript compiles without errors (`npm run build`) | ⬜ | Run before publishing |
 | All lint rules pass (`npm run lint`) | ⬜ | Run before publishing |
 | Light and dark icon SVGs present | ✅ | `anonymization.svg` / `anonymization.dark.svg` |
-| Credential test endpoint configured | ✅ | `tools/list` call in credential test |
+| Credential test endpoint configured | ✅ | MCP `initialize` call in credential test |
 | `continueOnFail` handled in `execute()` | ✅ | Implemented |
 | `NodeOperationError` used for all thrown errors | ✅ | Implemented |
 
@@ -39,7 +39,7 @@ Reference: [Submit community nodes](https://docs.n8n.io/integrations/creating-no
 2. Open package settings → **Publish access → Trusted Publishers**
 3. Add publisher:
    - Repository owner: your GitHub org/username
-   - Repository name: `n8n-nodes-nikan-anonymization`
+   - Repository name: `n8n-nodes-nybrix-anonymisation`
    - Workflow name: `publish.yml`
 
 ### Releasing a new version
@@ -56,8 +56,8 @@ This lints, builds, prompts for a version bump, updates `CHANGELOG.md`, commits,
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
-| README describes what the node does | ⬜ | Update `README.md` using `README_TEMPLATE.md` |
-| README documents credential setup | ⬜ | Point to `docs/setup.md` or inline |
+| README describes what the node does | ✅ | `README.md` complete |
+| README documents credential setup | ✅ | Inline in `README.md` credentials section |
 | `package.json` has non-empty `description`, `author`, `homepage` | ⬜ | Fill in before publishing |
 | `package.json` `repository.url` is set | ⬜ | Set to the GitHub repo URL |
 

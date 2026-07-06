@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-`n8n-nodes-nikan-anonymization` — an n8n community node that wraps the Nikan Anonymization API. The backend is a FastMCP server exposing three tools over MCP StreamableHttp (JSON-RPC 2.0 over `POST /mcp`):
+`n8n-nodes-nybrix-anonymisation` — an n8n community node that wraps the nybrix Anonymisation API. The backend is a FastMCP server exposing three tools over MCP StreamableHttp (JSON-RPC 2.0 over `POST /mcp`):
 
 - `start_transformation(text: base64, mode: "1"|"2")` → `request_id` (or `"Unauthorized"`)
 - `retrieve_result(request_id)` → result text | `"Still processing."` | `"Request ID not found."`
 - `status_requests()` → queue status (informational, not used by the node)
 
-Authentication is via an `X-API-Key` header. The base URL is configurable per credential.
+Authentication is via an `X-API-Key` header. The base URL defaults to `https://api.nybrix.ai` and is configurable per credential.
 
 ## Commands
 
@@ -33,7 +33,7 @@ Key source files:
 
 | File | Role |
 |------|------|
-| `credentials/NikanAnonymizationApi.credentials.ts` | Credential type: apiUrl + apiKey, X-API-Key injection, tools/list test ping |
+| `credentials/NikanAnonymizationApi.credentials.ts` | Credential type: apiUrl + apiKey, X-API-Key injection, MCP initialize test ping |
 | `nodes/Anonymization/Anonymization.node.ts` | Programmatic node: execute(), start→poll loop, continueOnFail |
 | `nodes/Anonymization/transport.ts` | MCP JSON-RPC helper: wraps `POST /mcp` calls, extracts `result.content[0].text` |
 
@@ -50,13 +50,20 @@ Enforced by `@n8n/eslint-plugin-community-nodes` (run `npm run lint` to check):
 ## Credential pattern
 
 `credentials/NikanAnonymizationApi.credentials.ts`:
+- Credential identifier: `nybrixAnonymisationApi`
 - `authenticate` block injects `X-API-Key` header automatically — transport.ts does not set it manually
-- `test` block pings `POST /mcp` with a `tools/list` call to validate connectivity
+- `test` block pings `POST /mcp` with an MCP `initialize` call to validate connectivity
 - `baseURL` in the test request uses expression syntax `={{$credentials?.apiUrl}}`
 
 ## Transport pattern
 
 `nodes/Anonymization/transport.ts`:
 - Accepts `this` as `IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions` (TypeScript explicit `this` parameter)
-- Calls `this.helpers.httpRequestWithAuthentication('nikanAnonymizationApi', options)` — credential injection is automatic
+- Calls `this.helpers.httpRequestWithAuthentication('nybrixAnonymisationApi', options)` — credential injection is automatic
 - Returns `response.result?.content?.[0]?.text ?? ''`
+
+## Operation values
+
+The operation parameter uses British spelling: `'anonymise'` and `'deanonymise'`. The mode mapping is:
+- `anonymise` → mode `"1"`
+- `deanonymise` → mode `"2"`
