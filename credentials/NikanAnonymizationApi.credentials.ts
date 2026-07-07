@@ -12,8 +12,8 @@ export class NikanAnonymizationApi implements ICredentialType {
   displayName = "Nybrix Anonymisation API";
 
   icon: Icon = {
-    light: "file:../nodes/Anonymization/anonymization.svg",
-    dark: "file:../nodes/Anonymization/anonymization.dark.svg",
+    light: "file:../nodes/Anonymization/nybrix.light.svg",
+    dark: "file:../nodes/Anonymization/nybrix.dark.svg",
   };
 
   documentationUrl = "https://github.com/Nikan-AI-Solution-GmbH/n8n-nodes-nybrix#credentials";

@@ -1,0 +1,13 @@
+node_modules
+.git
+credentials
+nodes
+docs
+*.md
+*.mjs
+tsconfig.json
+biome.json
+eslint.config.mjs
+.gitignore
+.gitlab-ci.yml
+CHANGELOG.md
