@@ -2,11 +2,7 @@
   "node": "n8n-nodes-nybrix-anonymisation.anonymization",
   "nodeVersion": "1.0",
   "codexVersion": "1.0",
-  "categories": ["AI", "Utility"],
-  "subcategories": {
-    "AI": ["Text Processing"],
-    "Utility": ["Privacy"]
-  },
+  "categories": ["Utility"],
   "alias": [
     "anonymize",
     "anonymise",
@@ -20,7 +16,6 @@
     "nybrix",
     "redact"
   ],
-  "description": "Detect and replace PII in text with realistic synthetic substitutes — and restore the originals on demand.",
   "resources": {
     "credentialDocumentation": [
       {
