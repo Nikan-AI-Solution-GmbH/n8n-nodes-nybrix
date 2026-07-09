@@ -4,8 +4,9 @@ import type {
   INodeExecutionData,
   INodeType,
   INodeTypeDescription,
+  JsonObject,
 } from "n8n-workflow";
-import { NodeConnectionTypes, NodeOperationError } from "n8n-workflow";
+import { NodeConnectionTypes, NodeApiError, NodeOperationError } from "n8n-workflow";
 import { mcpInitialize, mcpToolCall } from "./transport";
 
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => lodashDelay(resolve, ms));
@@ -139,7 +140,7 @@ export class Anonymization implements INodeType {
               { itemIndex: i },
             );
           }
-          throw new NodeOperationError(this.getNode(), err as Error, {
+          throw new NodeApiError(this.getNode(), err as unknown as JsonObject, {
             itemIndex: i,
           });
         }
@@ -205,7 +206,7 @@ export class Anonymization implements INodeType {
             pairedItem: i,
           });
         } else {
-          throw new NodeOperationError(this.getNode(), error as Error, {
+          throw new NodeApiError(this.getNode(), error as unknown as JsonObject, {
             itemIndex: i,
           });
         }
